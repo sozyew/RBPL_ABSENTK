@@ -1,0 +1,178 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#1e1e1e;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+
+.phone{
+    width:390px;
+    height:844px;
+    background:#fff;
+    border-radius:40px;
+    overflow:hidden;
+    box-shadow:0 25px 60px rgba(0,0,0,0.5);
+}
+
+
+.screen{
+    width:100%;
+    height:100%;
+    overflow-y:auto;
+}
+
+
+
+.login-bg{
+    height:100%;
+    background:linear-gradient(to bottom,#a8c48c 0%, #ffffff 45%);
+    padding:20px;
+    text-align:center;
+}
+
+.hero{
+    width:100%;
+    max-height:260px;
+    object-fit:contain;
+    margin-top:10px;
+}
+
+.login-bg h1{
+    margin:20px 0;
+    color:white;
+    font-weight:600;
+}
+
+form{
+    margin-top:10px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin:12px 0;
+    border:none;
+    border-radius:30px;
+    background:#f1f1f1;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    outline:none;
+    font-size:14px;
+}
+
+button{
+    width:70%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(to right,#5ed2a2,#dcd9a8);
+    font-weight:bold;
+    margin-top:15px;
+    cursor:pointer;
+}
+
+.bottom-text{
+    margin-top:30px;
+    font-size:15px;
+    text-align:left;
+}
+
+.bottom-text b{
+    font-weight:700;
+}
+
+.error{
+    color:red;
+    font-size:14px;
+}
+
+
+
+.dashboard-bg{
+    height:100%;
+    background:linear-gradient(to bottom,#b7dc8f 0%, #ffffff 40%);
+    padding:20px;
+}
+
+.header{
+    margin-bottom:20px;
+}
+
+.header h2{
+    color:white;
+    font-size:20px;
+}
+
+.header p{
+    color:white;
+    font-size:14px;
+    margin-top:5px;
+}
+
+.stats{
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+}
+
+.card{
+    flex:1;
+    background:#f3f3f3;
+    padding:20px;
+    border-radius:25px;
+}
+
+.card h3{
+    font-size:30px;
+    margin-top:10px;
+}
+
+.menu{
+    margin-top:30px;
+}
+
+.menu-item{
+    background:#e5e5e5;
+    padding:18px;
+    border-radius:30px;
+    margin-bottom:15px;
+}
+
+.menu-item strong{
+    font-size:16px;
+}
+
+.menu-item small{
+    display:block;
+    margin-top:5px;
+    font-size:13px;
+}
+
+/* ================= LINK MENU ================= */
+
+/* .menu-link{
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.menu-link .menu-item{
+    transition: 0.2s ease;
+}
+
+.menu-link .menu-item:active{
+    transform: scale(0.98);
+    background:#dcdcdc;
+} */
+
+.menu-item{
+    display:block;
+}
