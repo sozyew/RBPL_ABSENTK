@@ -2,12 +2,12 @@
 $conn = mysqli_connect("localhost","root","","db_absensi_tk");
 date_default_timezone_set("Asia/Jakarta");
 
-// ================== WAKTU ==================
+
 $today = date("Y-m-d");
 $hari  = date("l");
 $tanggalFull = date("d F Y");
 
-// ================== HAPUS ==================
+
 if(isset($_GET['hapus'])){
     $id = $_GET['hapus'];
 
@@ -21,7 +21,7 @@ if(isset($_GET['hapus'])){
     exit;
 }
 
-// ================== SIMPAN ==================
+
 if(isset($_POST['simpan'])){
     $id         = $_POST['id'];
     $status     = $_POST['status'];
@@ -56,7 +56,7 @@ if(isset($_POST['simpan'])){
     exit;
 }
 
-// ================== DATA ==================
+
 $data = mysqli_query($conn, "
     SELECT s.*, a.status, a.keterangan
     FROM siswa s
