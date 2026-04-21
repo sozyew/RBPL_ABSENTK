@@ -43,7 +43,7 @@ text-align:center;
 margin-bottom:15px;
 }
 
-/* TABLE */
+
 table{
 width:100%;
 border-collapse:collapse;
@@ -63,7 +63,7 @@ background:#52796f;
 color:white;
 }
 
-/* BADGE */
+
 .badge{
 padding:3px 10px;
 border-radius:10px;
@@ -80,7 +80,7 @@ color:#999;
 font-style:italic;
 }
 
-/* BUTTON */
+
 .btn{
 width:100%;
 margin-top:10px;
