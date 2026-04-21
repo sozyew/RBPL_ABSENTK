@@ -1,26 +1,57 @@
 <?php
-$conn = mysqli_connect("localhost","root","","db_absensi_tk");
-
-if(!$conn){
-    die("Koneksi gagal");
+session_start();
+if(!isset($_SESSION['login'])){
+    header("Location: login.php");
+    exit;
 }
 
+$conn = mysqli_connect("localhost","root","","db_absensi_tk");
 
-if(isset($_GET['hadir'])){
-    $id = intval($_GET['hadir']);
-    mysqli_query($conn,"UPDATE siswa SET status='Hadir' WHERE id_siswa=$id");
+date_default_timezone_set("Asia/Jakarta");
+
+$today = date("Y-m-d");
+$hari = date("l");
+
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+
+    $cek = mysqli_query($conn,"SELECT * FROM absensi 
+        WHERE id_siswa='$id' AND tanggal='$today'");
+
+    if(mysqli_num_rows($cek) > 0){
+        mysqli_query($conn,"UPDATE absensi 
+            SET status='Hadir', keterangan=''
+            WHERE id_siswa='$id' AND tanggal='$today'");
+    } else {
+        mysqli_query($conn,"INSERT INTO absensi 
+        (id_siswa,tanggal,hari,status,keterangan)
+        VALUES ('$id','$today','$hari','Hadir','')");
+    }
+
     header("Location: absen.php");
     exit;
 }
 
 
-$data = mysqli_query($conn,"SELECT * FROM siswa ORDER BY nama_siswa ASC");
+$data = mysqli_query($conn,"
+SELECT s.id_siswa, s.nama_siswa, a.status
+FROM siswa s
+LEFT JOIN absensi a 
+ON s.id_siswa = a.id_siswa 
+AND a.tanggal='$today'
+ORDER BY s.nama_siswa ASC
+");
 
-$hadirQ = mysqli_query($conn,"SELECT * FROM siswa WHERE status='Hadir'");
-$hadir = $hadirQ ? mysqli_num_rows($hadirQ) : 0;
 
-$totalQ = mysqli_query($conn,"SELECT * FROM siswa");
-$total = $totalQ ? mysqli_num_rows($totalQ) : 0;
+$hadir = mysqli_fetch_assoc(mysqli_query($conn,"
+SELECT COUNT(*) as jml FROM absensi 
+WHERE status='Hadir' AND tanggal='$today'
+"))['jml'];
+
+$total = mysqli_fetch_assoc(mysqli_query($conn,"
+SELECT COUNT(*) as jml FROM siswa
+"))['jml'];
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +65,7 @@ $total = $totalQ ? mysqli_num_rows($totalQ) : 0;
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+    font-family:sans-serif;
 }
 
 body{
@@ -42,7 +73,6 @@ body{
     display:flex;
     justify-content:center;
 }
-
 
 .phone{
     width:390px;
@@ -53,109 +83,124 @@ body{
 
 .header{
     background:#7fa483;
-    padding:25px 20px 40px;
+    padding:25px;
+    text-align:center;
     color:white;
     border-bottom-left-radius:40px;
     border-bottom-right-radius:40px;
-    text-align:center;
 }
-
-.header h2{
-    font-size:18px;
-}
-
-.counter{
-    font-size:12px;
-    margin-top:8px;
-}
-
 
 .container{
     padding:15px;
-    margin-top:-25px;
+    margin-top:-20px;
 }
+
 
 .card{
     background:#e7e7e7;
     padding:14px;
     border-radius:18px;
-    margin-bottom:14px;
+    margin-bottom:12px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     box-shadow:0 4px 8px rgba(0,0,0,0.1);
 }
 
-.nama{
-    font-size:14px;
-    font-weight:500;
-    width:70%;
-}
-
 
 .btn-hadir{
-    background:linear-gradient(to right,#b7e4c7,#52b788);
+    background:#52b788;
+    color:white;
     border:none;
-    padding:6px 18px;
-    border-radius:20px;
-    font-size:11px;
+    padding:6px 14px;
+    border-radius:15px;
+    font-size:12px;
     cursor:pointer;
 }
 
 
-.check{
-    width:24px;
-    height:24px;
-    border-radius:50%;
+.status-hadir{
     background:#c9d9c8;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#4a7c59;
-    font-size:13px;
+    padding:6px 12px;
+    border-radius:15px;
+    font-size:12px;
+}
+
+.status-izin{
+    color:orange;
     font-weight:bold;
 }
 
-a{
-    text-decoration:none;
+.status-sakit{
+    color:red;
+    font-weight:bold;
+}
+
+.btn-back{
+    width:100%;
+    margin-top:15px;
+    padding:10px;
+    border:none;
+    border-radius:25px;
+    background:#52796f;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
 }
 </style>
 </head>
+
 <body>
 
 <div class="phone">
 
-    <div class="header">
-        <h2>Absen Siswa</h2>
-        <div class="counter">
-            Sudah Absen : <?php echo $hadir; ?> / <?php echo $total; ?>
-        </div>
-    </div>
+<div class="header">
+    <h2>Absen Siswa</h2>
+    <p><?php echo $hadir; ?> / <?php echo $total; ?> hadir</p>
+</div>
 
-    <div class="container">
+<div class="container">
 
-        <?php while($row = mysqli_fetch_assoc($data)){ 
-            $status = $row['status'] ?? 'Belum';
-        ?>
+<?php while($row = mysqli_fetch_assoc($data)){ ?>
 
-        <div class="card">
-            <div class="nama">
-                <?php echo $row['nama_siswa']; ?>
-            </div>
+<div class="card">
 
-            <?php if($status == "Hadir"){ ?>
-                <div class="check">✓</div>
-            <?php }else{ ?>
-                <a href="?hadir=<?php echo $row['id_siswa']; ?>">
-                    <button class="btn-hadir">Hadir</button>
-                </a>
-            <?php } ?>
+<span><?php echo $row['nama_siswa']; ?></span>
 
-        </div>
+<div>
 
-        <?php } ?>
+<?php if(!$row['status']){ ?>
 
-    </div>
+<form method="GET" action="absen.php" style="margin:0;">
+    <input type="hidden" name="id" value="<?php echo $row['id_siswa']; ?>">
+    <button type="submit" class="btn-hadir">Hadir</button>
+</form>
+
+<?php } elseif($row['status'] == "Hadir"){ ?>
+
+<span class="status-hadir">✓ Hadir</span>
+
+<?php } elseif($row['status'] == "Izin"){ ?>
+
+<span class="status-izin">Izin</span>
+
+<?php } elseif($row['status'] == "Sakit"){ ?>
+
+<span class="status-sakit">Sakit</span>
+
+<?php } ?>
+
+</div>
+
+</div>
+
+<?php } ?>
+
+<a href="dashboard.php">
+    <button class="btn-back">Kembali ke Dashboard</button>
+</a>
+
+</div>
 
 </div>
 
