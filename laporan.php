@@ -2,12 +2,12 @@
 $conn = mysqli_connect("localhost","root","","db_absensi_tk");
 date_default_timezone_set("Asia/Jakarta");
 
-// ================== WAKTU ==================
+
 $today = date("Y-m-d");
 $bulan = date("m");
 $tahun = date("Y");
 
-// ================== HITUNG ==================
+
 function hitung($conn,$status,$today){
     $q = mysqli_query($conn,"SELECT COUNT(*) as jml FROM absensi WHERE status='$status' AND tanggal='$today'");
     return mysqli_fetch_assoc($q)['jml'];
@@ -21,7 +21,7 @@ $total = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) as jml FROM sisw
 $sudah = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(DISTINCT id_siswa) as jml FROM absensi WHERE tanggal='$today'"))['jml'];
 $belum = $total - $sudah;
 
-// ================== CHART HARIAN ==================
+
 $hariList = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 $label    = ['Sen','Sel','Rab','Kam','Jum'];
 
