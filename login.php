@@ -134,11 +134,7 @@ button{
         <button type="submit" name="login">Sign In</button>
     </form>
 
-    <!-- <div class="bottom-text">
-        Belum Punya Akun?<br>
-        <span>Masuk</span>
-    </div> -->
-
+    
 </div>
 </div>
 
